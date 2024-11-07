@@ -19,12 +19,23 @@ mongoose.connect(process.env.MONGO_URI)
 })
 
 //Create Schema username
-const UserSchema=new Schema({
-  username:{type:String, required:true, unique:true}
+const userSchema=new Schema({
+  username:{type:String, required:true}
 })
 
-//create collection in mongodb
-let userModel=mongoose.model("user",UserSchema)
+//Create Schema exercise
+let exerciseSchema=new Schema({
+ userId:{type:Number, required:true},
+ description:{type:String, required:true},
+ duration:{type:Number, required:true},
+ date:{type:Date, default:new Date()}
+
+})
+
+//Create collection user in mongodb
+let userModel=mongoose.model("user",userSchema)
+//Create collection exercise in mongodb
+let exerciseModel=mongoose.model("exercise", exerciseSchema)
 
 app.use("/", bodyParser.urlencoded({extended:false}))
 
@@ -46,6 +57,44 @@ app.post("/api/users",(req, res)=>{
  res.json(newUser)
 })
 
+//get users 
+app.get("/api/users",(req,res)=>{
+  userModel.find({}).then((users)=>{
+    res.json(users)
+  })
+})
+
+app.post('/api/users/:_id/exercises',(req,res)=>{
+  console.log(req.body)
+   let userId=req.params._id
+   let exerciseObj={
+    userId:userId,
+    description:req.body.description,
+    duration:req.body.duration
+   }
+   if(req.body.date!==''){
+    exerciseObj.date=req.body.date
+   }
+
+   let newExercise=new exerciseModel(exerciseObj)
+   //Search user with userModel and add characterist
+   userModel.findById(userId,(userFound)=>{
+    if(err) console.log(err)
+      
+      console.log(userFound)
+      newExercise.save()
+      res.json({
+        _id:userFound._id,
+        username:userFound.username,
+        description:newExercise.description,
+        duration:newExercise.duration,
+        date:newExercise.date.toDateString()
+      })
+   })
+   
+   
+
+})
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {
