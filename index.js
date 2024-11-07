@@ -9,6 +9,7 @@ let bodyParser=require('body-parser')
 //Verify connection MONGOSE, before create varible in file .env
 console.log(process.env.MONGO_URI)
 
+//conection to data base NoSQL 
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{
   console.log('Connect to Mongo')
@@ -16,6 +17,16 @@ mongoose.connect(process.env.MONGO_URI)
 .catch((err)=>{
   console.error('Error connectiong to Mongo',err)
 })
+
+//Create Schema username
+const UserSchema=new Schema({
+  username:{type:String, required:true, unique:true}
+})
+
+//create collection in mongodb
+let userModel=mongoose.model("username",UserSchema)
+
+app.use("/", bodyParser.urlencoded({extended:false}))
 
 app.use(cors())
 app.use(express.static('public'))
@@ -26,6 +37,9 @@ app.get('/', (req, res) => {
 app.get("/api",(req,res)=>{
   res.json({message:"hi hacker"})
 })
+
+//api post add username:
+app.post()
 
 
 
