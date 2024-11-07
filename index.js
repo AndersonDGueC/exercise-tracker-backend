@@ -7,7 +7,7 @@ const{Schema}=mongoose
 let bodyParser=require('body-parser')
 
 //Verify connection MONGOSE, before create varible in file .env
-console.log(process.env.MONGO_URI)
+//console.log(process.env.MONGO_URI)
 
 //conection to data base NoSQL 
 mongoose.connect(process.env.MONGO_URI)
@@ -24,7 +24,7 @@ const UserSchema=new Schema({
 })
 
 //create collection in mongodb
-let userModel=mongoose.model("username",UserSchema)
+let userModel=mongoose.model("user",UserSchema)
 
 app.use("/", bodyParser.urlencoded({extended:false}))
 
@@ -39,7 +39,12 @@ app.get("/api",(req,res)=>{
 })
 
 //api post add username:
-app.post()
+app.post("/api/users",(req, res)=>{
+ let username=req.body.username
+ let newUser=userModel({username:username})
+ newUser.save()
+ res.json(newUser)
+})
 
 
 
