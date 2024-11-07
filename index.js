@@ -9,6 +9,14 @@ let bodyParser=require('body-parser')
 //Verify connection MONGOSE, before create varible in file .env
 console.log(process.env.MONGO_URI)
 
+mongoose.connect(process.env.MONGO_URI)
+.then(()=>{
+  console.log('Connect to Mongo')
+})
+.catch((err)=>{
+  console.error('Error connectiong to Mongo',err)
+})
+
 app.use(cors())
 app.use(express.static('public'))
 app.get('/', (req, res) => {

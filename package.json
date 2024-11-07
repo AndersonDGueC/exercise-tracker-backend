@@ -11,7 +11,8 @@
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
 		"express": "^4.16.4",
-		"mongodb": "^6.10.0"
+		"mongodb": "^6.10.0",
+		"mongoose": "^8.8.0"
 	},
 	"repository": {
 		"url": "https://github.com/freeCodeCamp/boilerplate-project-exercisetracker"
@@ -20,8 +21,5 @@
 	"keywords": [
 		"node",
 		"express"
-	],
-	"devDependencies": {
-		"mongoose": "^8.8.0"
-	}
+	]
 }
