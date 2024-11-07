@@ -91,6 +91,46 @@ app.post('/api/users/:_id/exercises',(req,res)=>{
         date:newExercise.date.toDateString()
       })
    })
+
+   //add search ids and show log with response json
+   app.get("/api/users/:_id/logs",(req,res)=>{
+     let userId=req.params._id
+     
+     let responseObj={}
+
+     userModel.findById(userId,(userFound)=>{
+      if(err) console.log(err)
+        
+        console.log(userFound)
+
+        let username=userFound.username
+        let userId=userFound.userId
+
+        responseObj={
+          _id:userId,
+          username:username
+        }
+
+        exerciseModel.find({username:username},(err,exercises)=>{
+          if(err) console.log(err)
+
+            //choice only description and continuo key in exercises
+            exercises.map((x)=>{
+              return {
+                description:x.description,
+                duration:x.duration,
+                date:x.date.toDateString()
+              }
+            })
+
+            responseObj.log=exercises
+            responseObj.count=exercises.length
+            res.json(responseObj)
+        })
+
+     })
+
+   })
    
    
 
